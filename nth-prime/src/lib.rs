@@ -1,25 +1,33 @@
 pub fn nth(n: u32) -> u32 {
-    let mut x = 2;
-    let mut cnt = 0;
+    match n {
+        0 => 2,
+        1 => 3,
+        _ => {
+            let mut cnt = 2;
+            let mut x = 5;
 
-    while n != cnt {
-        x += 1;
-
-        if is_prime(x) {
-            cnt += 1;
+            while cnt < n {
+                x += 2;
+                if is_prime(x) {
+                    cnt += 1;
+                }
+            }
+            x
         }
     }
-    x
 }
 
 fn is_prime(n: u32) -> bool {
-    for v in 2..n {
-        if n == v {
-            continue
-        }
-        if n % v == 0 {
+    if n == 1 {
+        return false
+    }
+
+    let upto = ((n as f64).sqrt() as u32) + 1;
+    for i in 2..upto {
+        if n % i == 0 {
             return false
         }
     }
+
     true
 }
