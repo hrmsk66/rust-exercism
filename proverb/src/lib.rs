@@ -1,19 +1,13 @@
 pub fn build_proverb(list: &[&str]) -> String {
-    let mut r = String::new();
+    let mut proverbs = vec![];
 
-    match list.len() {
-        0 => { return r; },
-        1 => {},
-        _ => {
-            for (i, item) in list.iter().enumerate() {
-                if i + 1 == list.len() {
-                    break;
-                }
-                r.push_str(&format!("For want of a {} the {} was lost.\n", item, list[i+1]));
-            }
-        }
+    for (left, right) in list.iter().zip(list.iter().skip(1)) {
+        proverbs.push(format!("For want of a {} the {} was lost.", left, right));
     }
 
-    r.push_str(&format!("And all for the want of a {}.", list[0]));
-    r
+    if let Some(first) = list.first() {
+        proverbs.push(format!("And all for the want of a {}.", first));
+    }
+
+    proverbs.join("\n")
 }
