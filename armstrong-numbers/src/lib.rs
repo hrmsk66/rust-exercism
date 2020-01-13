@@ -1,11 +1,9 @@
 pub fn is_armstrong_number(num: u32) -> bool {
-    let numstr = num.to_string();
-    let mut r : u32 = 0;
+    let nums : Vec<u32> = num
+        .to_string()
+        .chars()
+        .map(|n| n.to_digit(10).unwrap())
+        .collect();
 
-    for c in numstr.chars() {
-        r += (c as u32 - 48).pow(numstr.len() as u32);
-    }
-
-
-    r == num
+        num == nums.iter().fold(0, |sum, x| sum + x.pow(nums.len() as u32))
 }
