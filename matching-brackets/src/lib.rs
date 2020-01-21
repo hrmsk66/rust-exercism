@@ -1,30 +1,20 @@
+fn opener_of(c: char) -> char {
+    match c {
+        ']' => '[',
+        '}' => '{',
+        ')' => '(',
+        _ => unreachable!(),
+    }
+}
+
 pub fn brackets_are_balanced(string: &str) -> bool {
-    let mut stack : Vec<char> = Vec::new();
+    let mut stack = vec![];
     for c in string.chars() {
         match c {
             '[' | '{' | '(' => stack.push(c),
-            ']' => {
-                if stack.is_empty() || stack.pop().unwrap() != '[' {
-                    return false
-                }
-            },
-            '}' => {
-                if stack.is_empty() || stack.pop().unwrap() != '{' {
-                    return false
-                }
-            },
-            ')' => {
-                if stack.is_empty() || stack.pop().unwrap() != '(' {
-                    return false
-                }
-            },
+            ']' | '}' | ')' => if stack.pop() != Some(opener_of(c)) { return false }
             _ => (),
         }
     }
-
-    if stack.is_empty() {
-        true
-    } else {
-        false
-    }
+    stack.is_empty()
 }
