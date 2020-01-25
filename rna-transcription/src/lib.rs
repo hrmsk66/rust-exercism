@@ -1,52 +1,33 @@
 #[derive(Debug, PartialEq)]
-pub struct DNA { nucs: Vec<char> }
+pub struct DNA(String);
 
 #[derive(Debug, PartialEq)]
-pub struct RNA { nucs: Vec<char> }
-
-fn map (nuc: char) -> char {
-    match nuc {
-        'A' => 'U',
-        'C' => 'G',
-        'G' => 'C',
-        'T' => 'A',
-        _ => unreachable!(),
-    }
-}
+pub struct RNA(String);
 
 impl DNA {
     pub fn new(dna: &str) -> Result<DNA, usize> {
-        let mut d = DNA { nucs: Vec::new() };
-
-        for (i, v) in dna.chars().enumerate() {
-            match v {
-                'A'|'C'|'G'|'T' => d.nucs.push(v),
-                _ => return Err(i),
-            }
+        match dna.find(|c: char| !"ACGT".contains(c)) {
+            Some(val) => Err(val),
+            None => Ok(DNA(String::from(dna)))
         }
-        Ok(d)
     }
 
     pub fn into_rna(self) -> RNA {
-        let mut nucs: Vec<char> = Vec::new();
-
-        for v in self.nucs {
-            nucs.push(map(v));
-        }
-        RNA { nucs }
+        RNA(self.0.chars().map(|c| match c {
+            'G' => 'C',
+            'C' => 'G',
+            'T' => 'A',
+            'A' => 'U',
+            _ => unreachable!(),
+        }).collect())
     }
 }
 
 impl RNA {
     pub fn new(rna: &str) -> Result<RNA, usize> {
-        let mut r = RNA { nucs: Vec::new() };
-
-        for (i, v) in rna.chars().enumerate() {
-            match v {
-                'A'|'C'|'G'|'U' => r.nucs.push(v),
-                _ => return Err(i),
-            }
+        match rna.find(|c: char| !"ACGU".contains(c)) {
+            Some(val) => Err(val),
+            None => Ok(RNA(String::from(rna)))
         }
-        Ok(r)
     }
 }
