@@ -1,19 +1,16 @@
 use std::collections::HashSet;
 
 pub fn primes_up_to(upper_bound: u64) -> Vec<u64> {
-    let mut set = HashSet::<u64>::new();
-    let mut r = Vec::<u64>::new();
-
-    for n in 2..=upper_bound {
-        if !set.contains(&n) {
-            r.push(n);
-
-            let mut m = n * 2;
-            while m <= upper_bound {
-               set.insert(m);
-               m += n;
-            }
+    let mut non_primes: HashSet<u64> = HashSet::new();
+    (2..=upper_bound).filter_map(|x| {
+        if non_primes.contains(&x) {
+            return None;
         }
-    }
-    r
+
+        for y in ((x * 2)..=upper_bound).step_by(x as usize) {
+            non_primes.insert(y);
+        }
+
+        Some(x)
+    }).collect()
 }
