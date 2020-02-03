@@ -1,18 +1,14 @@
 use std::cmp::Ordering;
 
-pub fn find<T, S>(array: S, key: T) -> Option<usize>
-where
-    T: Ord,
-    S: AsRef<[T]>,
-{
-    let array = array.as_ref();
-    if array.is_empty() {
+pub fn find(array: &[i32], key: i32) -> Option<usize> {
+    if array.len() == 0 {
         return None;
     }
-    let half = array.len() / 2;
-    match array[half].cmp(&key) {
-        Ordering::Equal => Some(half),
-        Ordering::Greater => find(&array[..half], key),
-        Ordering::Less => find(&array[half + 1..], key).map(|p| p + half + 1),
+
+    let mid = array.len() / 2;
+    match array[mid].cmp(&key) {
+        Ordering::Equal => Some(mid),
+        Ordering::Greater => find(&array[..mid], key),
+        Ordering::Less => find(&array[mid + 1..], key).map(|n| n + mid + 1),
     }
 }
