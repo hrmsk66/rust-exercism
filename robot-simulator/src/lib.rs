@@ -50,16 +50,15 @@ impl Robot {
         self
     }
 
-    pub fn instructions(mut self, instructions: &str) -> Self {
-        for i in instructions.chars() {
-            match i {
-                'L' => self = self.turn_left(),
-                'R' => self = self.turn_right(),
-                'A' => self = self.advance(),
-                _ => unreachable!(),
-            }
-        }
-        self
+    pub fn instructions(self, instructions: &str) -> Self {
+        instructions
+            .chars()
+            .fold(self, |new_self, instruction| match instruction {
+                'R' => new_self.turn_right(),
+                'L' => new_self.turn_left(),
+                'A' => new_self.advance(),
+                _ => panic!("Unknown instruction: {}", instruction),
+            })
     }
 
 
